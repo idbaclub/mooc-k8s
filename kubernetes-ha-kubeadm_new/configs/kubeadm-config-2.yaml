@@ -1,0 +1,25 @@
+apiVersion: kubeadm.k8s.io/v1alpha2
+kind: MasterConfiguration
+kubernetesVersion: {{VERSION}}
+apiServerCertSANs:
+- "{{MASTER_VIP}}"
+api:
+    controlPlaneEndpoint: "{{MASTER_VIP}}:6443"
+etcd:
+  local:
+    extraArgs:
+      listen-client-urls: "https://127.0.0.1:2379,https://{{MASTER_2_IP}}:2379"
+      advertise-client-urls: "https://{{MASTER_2_IP}}:2379"
+      listen-peer-urls: "https://{{MASTER_2_IP}}:2380"
+      initial-advertise-peer-urls: "https://{{MASTER_2_IP}}:2380"
+      initial-cluster: "{{MASTER_0_HOSTNAME}}=https://{{MASTER_0_IP}}:2380,{{MASTER_1_HOSTNAME}}=https://{{MASTER_1_IP}}:2380,{{MASTER_2_HOSTNAME}}=https://{{MASTER_2_IP}}:2380"
+      initial-cluster-state: existing
+    serverCertSANs:
+      - {{MASTER_2_HOSTNAME}}
+      - {{MASTER_2_IP}}
+    peerCertSANs:
+      - {{MASTER_2_HOSTNAME}}
+      - {{MASTER_2_IP}}
+networking:
+    # This CIDR is a calico default. Substitute or remove for your CNI provider.
+    podSubnet: "{{POD_CIDR}}"
