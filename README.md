@@ -1,4 +1,4 @@
-# mooc-k8s
+# mooc-k8s(kubernetes v1.11.0)
 《部署落地+业务迁移 玩转K8S进阶与企业级实践技能》配套代码
 
 - mooc-k8s-demo, 源代码
