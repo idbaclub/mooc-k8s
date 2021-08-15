@@ -1,0 +1,10 @@
+FROM hub.daoshi.club/kubernetes/openjdk:8-jre-alpine
+
+COPY target/dubbo-demo-1.0-SNAPSHOT-assembly.tar.gz /opt/dubbo-demo-assembly.tar.gz
+
+RUN mkdir -p /opt/dubbo-demo && \
+    tar -zxvf /opt/dubbo-demo-assembly.tar.gz -C /opt/dubbo-demo && \
+    chmod +x /opt/dubbo-demo/bin/start.sh && \
+    rm -rf /opt/dubbo-demo-assembly.tar.gz
+
+ENTRYPOINT ["sh", "/opt/dubbo-demo/bin/start.sh"]

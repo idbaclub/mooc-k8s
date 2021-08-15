@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-demo
+spec:
+  selector:
+    matchLabels:
+      app: web-demo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: web-demo
+    spec:
+      containers:
+      - name: web-demo
+        image: hub.daoshi.club/kubernetes/web-demo:1.1.0
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-demo
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: web-demo
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: web-demo 
+spec:
+  rules:
+  - host: web.daoshi.club 
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: web-demo
+          servicePort: 80
